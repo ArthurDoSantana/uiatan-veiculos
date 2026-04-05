@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 150 20% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 150 20% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 20% 8%;
+    --primary: 150 62% 16%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 150 15% 94%;
+    --secondary-foreground: 150 20% 10%;
+    --muted: 150 10% 94%;
+    --muted-foreground: 150 10% 45%;
+    --accent: 150 55% 20%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 150 10% 88%;
+    --input: 150 10% 88%;
+    --ring: 150 62% 16%;
+    --radius: 0.5rem;
+    --font-dm-sans: 'DM Sans', system-ui, sans-serif;
+    --font-bebas: 'Bebas Neue', Impact, sans-serif;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-dm-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-dm-sans);
+    font-weight: 600;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-sm border border-white/20 shadow-lg;
+  }
+
+  .brand-gradient {
+    background: linear-gradient(135deg, #0a2e14 0%, #145c2e 50%, #0f3d1e 100%);
+  }
+
+  .brand-gradient-subtle {
+    background: linear-gradient(180deg, #071a0d 0%, #0f3d1e 100%);
+  }
+
+  .text-shadow-sm {
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  }
+
+  .vehicle-card-hover {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f5f1;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #145c2e;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #0f3d1e;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-fade-in-delay-1 {
+    animation: fadeIn 0.5s ease-out 0.1s forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-in-delay-2 {
+    animation: fadeIn 0.5s ease-out 0.2s forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-in-delay-3 {
+    animation: fadeIn 0.5s ease-out 0.3s forwards;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(90deg, #e8ede9 25%, #d4ddd5 50%, #e8ede9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
