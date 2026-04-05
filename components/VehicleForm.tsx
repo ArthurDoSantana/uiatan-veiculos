@@ -52,27 +52,40 @@ export default function VehicleForm({ vehicle }: VehicleFormProps) {
     if (!files || files.length === 0) return;
 
     setUploadingImages(true);
-    const newUrls: string[] = [];
 
-    for (const file of Array.from(files)) {
-      const formData = new FormData();
-      formData.append("file", file);
+    try {
+      const uploadResults = await Promise.all(
+        Array.from(files).map(async (file) => {
+          const formData = new FormData();
+          formData.append("file", file);
 
-      try {
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-        const data = await res.json();
-        if (data.url) newUrls.push(data.url);
-      } catch {
-        toast.error(`Erro ao enviar ${file.name}`);
+          try {
+            const res = await fetch("/api/upload", {
+              method: "POST",
+              body: formData,
+            });
+
+            const data = (await res.json()) as { url?: string; error?: string };
+            if (!res.ok || !data.url) {
+              throw new Error(data.error || "Falha no upload.");
+            }
+
+            return data.url;
+          } catch {
+            toast.error(`Erro ao enviar ${file.name}`);
+            return null;
+          }
+        })
+      );
+
+      const newUrls = uploadResults.filter((url): url is string => Boolean(url));
+      if (newUrls.length > 0) {
+        setImageUrls((prev) => [...prev, ...newUrls]);
       }
+    } finally {
+      setUploadingImages(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
-
-    setImageUrls((prev) => [...prev, ...newUrls]);
-    setUploadingImages(false);
-    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const removeImage = (idx: number) => {

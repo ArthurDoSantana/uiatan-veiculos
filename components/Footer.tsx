@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, Phone, MessageCircle, Instagram } from "lucide-react";
+import { MapPin, Phone, MessageCircle } from "lucide-react";
 
 export default function Footer() {
   return (

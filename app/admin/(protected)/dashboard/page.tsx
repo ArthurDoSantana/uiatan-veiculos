@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getVehicles, getAdminStats } from "@/actions/vehicles";
-import StatusBadge from "@/components/StatusBadge";
 import { formatPrice } from "@/lib/utils";
 import {
   PlusCircle,

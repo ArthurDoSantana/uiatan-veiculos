@@ -20,9 +20,11 @@ export default function ProtectedAdminLayout({
           >
             UIATAN VEÍCULOS
           </span>
-          <a href="/api/auth/logout" className="text-white/60 hover:text-white text-sm">
-            Sair
-          </a>
+          <form action="/api/auth/logout" method="POST">
+            <button type="submit" className="text-white/60 hover:text-white text-sm">
+              Sair
+            </button>
+          </form>
         </div>
         {children}
       </div>

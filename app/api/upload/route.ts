@@ -2,9 +2,24 @@ import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import { existsSync } from "fs";
+import { randomUUID } from "crypto";
+import { isAuthenticated } from "@/lib/auth";
+
+const MIME_EXTENSIONS: Record<string, string> = {
+  "image/jpeg": "jpg",
+  "image/jpg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+  "image/gif": "gif",
+};
 
 export async function POST(request: NextRequest) {
   try {
+    const authed = await isAuthenticated();
+    if (!authed) {
+      return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
+    }
+
     const formData = await request.formData();
     const file = formData.get("file") as File;
 
@@ -27,8 +42,8 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes);
 
     // Generate unique filename
-    const ext = file.name.split(".").pop() || "jpg";
-    const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const ext = MIME_EXTENSIONS[file.type] || "jpg";
+    const uniqueName = `${Date.now()}-${randomUUID()}.${ext}`;
     const uploadDir = join(process.cwd(), "public", "uploads");
 
     // Ensure uploads directory exists
@@ -46,9 +61,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Erro ao fazer upload." }, { status: 500 });
   }
 }
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
