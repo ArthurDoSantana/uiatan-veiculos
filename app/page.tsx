@@ -82,7 +82,7 @@ export default async function HomePage({
             <div className="max-w-3xl">
               <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-6">
                 <MapPin size={13} className="text-green-400" />
-                <span className="text-white/80 text-sm font-medium">Pelotas, Rio Grande do Sul</span>
+                <span className="text-white/80 text-sm font-medium">Canguçu, Rio Grande do Sul</span>
               </div>
               <h1
                 className="text-white mb-4 leading-none"
@@ -96,7 +96,7 @@ export default async function HomePage({
                 <span className="text-green-400">ESTÁ AQUI</span>
               </h1>
               <p className="text-white/70 text-lg mb-8 max-w-xl leading-relaxed">
-                Encontre o veículo perfeito com procedência garantida e o melhor atendimento de Pelotas.
+                Encontre o veículo perfeito com procedência garantida e o melhor atendimento de Canguçu.
               </p>
               <div className="flex flex-wrap gap-4">
                 <a

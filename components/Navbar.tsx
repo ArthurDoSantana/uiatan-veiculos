@@ -31,7 +31,7 @@ export default function Navbar() {
               >
                 Uiatan Veículos
               </span>
-              <span className="text-white/60 text-xs">Pelotas • RS</span>
+              <span className="text-white/60 text-xs">Canguçu • RS</span>
             </div>
           </Link>
 

@@ -3,13 +3,13 @@ import "./globals.css";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: "Uiatan Veículos — Garagem Premium em Pelotas",
+  title: "Uiatan Veículos — Garagem Premium em Canguçu",
   description:
-    "Encontre o veículo dos seus sonhos na Uiatan Veículos. Carros, SUVs e utilitários com procedência garantida em Pelotas, RS.",
-  keywords: "carros, veículos, comprar carro, Pelotas, RS, Uiatan Veículos",
+    "Encontre o veículo dos seus sonhos na Uiatan Veículos. Carros, SUVs e utilitários com procedência garantida em Canguçu, RS.",
+  keywords: "carros, veículos, comprar carro, Canguçu, RS, Uiatan Veículos",
   openGraph: {
     title: "Uiatan Veículos",
-    description: "Garagem Premium em Pelotas, RS",
+    description: "Garagem Premium em Canguçu, RS",
     type: "website",
   },
 };

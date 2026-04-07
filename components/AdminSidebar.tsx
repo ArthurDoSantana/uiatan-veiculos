@@ -28,7 +28,7 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 min-h-screen bg-brand-dark flex flex-col border-r border-white/10">
+    <aside className="w-64 h-full min-h-screen bg-brand-dark flex flex-col border-r border-white/10">
       {/* Logo */}
       <div className="p-6 border-b border-white/10">
         <Link href="/admin/dashboard" className="flex items-center gap-3">

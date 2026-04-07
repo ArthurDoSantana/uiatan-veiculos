@@ -27,7 +27,7 @@ export async function generateMetadata({
   if (!vehicle) return { title: "Veículo não encontrado" };
   return {
     title: `${vehicle.name} — Uiatan Veículos`,
-    description: vehicle.description || `${vehicle.name} à venda na Uiatan Veículos, Pelotas RS`,
+    description: vehicle.description || `${vehicle.name} à venda na Uiatan Veículos, Canguçu RS`,
   };
 }
 

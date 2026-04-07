@@ -19,7 +19,7 @@ export default function Footer() {
               UIATAN VEÍCULOS
             </h3>
             <p className="text-white/50 text-sm leading-relaxed">
-              Veículos selecionados com procedência e qualidade garantida em Pelotas, RS.
+              Veículos selecionados com procedência e qualidade garantida em Canguçu, RS.
             </p>
           </div>
 
@@ -70,7 +70,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <MapPin size={14} />
-                Pelotas, Rio Grande do Sul
+                Canguçu, Rio Grande do Sul
               </li>
             </ul>
           </div>
