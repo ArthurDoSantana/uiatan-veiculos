@@ -1,10 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { destroySession } from "@/lib/auth";
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   await destroySession();
-  return NextResponse.redirect(
-    new URL("/admin/login", process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
-    303
-  );
+  return NextResponse.redirect(new URL("/admin/login", request.url), 303);
 }

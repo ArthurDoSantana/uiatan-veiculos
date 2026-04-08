@@ -15,11 +15,16 @@ model Vehicle {
   name        String
   description String?
   price       Float
+  costPrice   Float?
   status      String        @default("AVAILABLE") // AVAILABLE | RESERVED | SOLD
   year        Int?
   brand       String?
   mileage     Int?
   color       String?
+  plate       String?
+  fipeCode    String?
+  fipePrice   Float?
+  fipeUpdatedAt DateTime?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   images      Image[]

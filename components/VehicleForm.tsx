@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { toast } from "sonner";
-import { Upload, X, Loader2, Save, Car } from "lucide-react";
+import { Upload, X, Loader2, Save, Car, DollarSign } from "lucide-react";
 import { createVehicle, updateVehicle } from "@/actions/vehicles";
 
 interface VehicleFormProps {
@@ -13,11 +13,13 @@ interface VehicleFormProps {
     name: string;
     description: string | null;
     price: number;
+    costPrice: number | null;
     status: string;
     year: number | null;
     brand: string | null;
     mileage: number | null;
     color: string | null;
+    plate: string | null;
     images: { id: string; url: string }[];
   };
 }
@@ -34,11 +36,13 @@ export default function VehicleForm({ vehicle }: VehicleFormProps) {
     name: vehicle?.name || "",
     description: vehicle?.description || "",
     price: vehicle?.price?.toString() || "",
+    costPrice: vehicle?.costPrice?.toString() || "",
     status: vehicle?.status || "AVAILABLE",
     year: vehicle?.year?.toString() || "",
     brand: vehicle?.brand || "",
     mileage: vehicle?.mileage?.toString() || "",
     color: vehicle?.color || "",
+    plate: vehicle?.plate || "",
   });
 
   const handleChange = (
@@ -106,11 +110,15 @@ export default function VehicleForm({ vehicle }: VehicleFormProps) {
         name: form.name,
         description: form.description,
         price: parseFloat(form.price),
+        costPrice: form.costPrice ? parseFloat(form.costPrice) : undefined,
         status: form.status as "AVAILABLE" | "RESERVED" | "SOLD",
         year: form.year ? parseInt(form.year) : undefined,
         brand: form.brand || undefined,
         mileage: form.mileage ? parseInt(form.mileage) : undefined,
         color: form.color || undefined,
+        plate: form.plate
+          ? form.plate.toUpperCase().replace(/[^A-Z0-9]/g, "")
+          : undefined,
         imageUrls,
       };
 
@@ -130,6 +138,14 @@ export default function VehicleForm({ vehicle }: VehicleFormProps) {
       setLoading(false);
     }
   };
+
+  const margin = form.price && form.costPrice
+    ? parseFloat(form.price) - parseFloat(form.costPrice)
+    : null;
+
+  const marginPct = margin !== null && parseFloat(form.costPrice) > 0
+    ? (margin / parseFloat(form.costPrice)) * 100
+    : null;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
@@ -184,18 +200,16 @@ export default function VehicleForm({ vehicle }: VehicleFormProps) {
           </div>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-              Preço (R$) *
+              Placa
             </label>
             <input
-              type="number"
-              name="price"
-              value={form.price}
+              type="text"
+              name="plate"
+              value={form.plate}
               onChange={handleChange}
-              placeholder="Ex: 149900"
-              required
-              min="0"
-              step="100"
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary transition-all"
+              placeholder="ABC1234 ou ABC1D23"
+              maxLength={8}
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 font-mono tracking-widest uppercase focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary transition-all"
             />
           </div>
           <div>
@@ -254,6 +268,67 @@ export default function VehicleForm({ vehicle }: VehicleFormProps) {
             />
           </div>
         </div>
+      </div>
+
+      {/* Prices */}
+      <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+        <h2 className="text-lg font-bold text-gray-900 mb-5 flex items-center gap-2">
+          <DollarSign size={20} className="text-brand-primary" />
+          Controle de Valores
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+              Preço de Custo (R$)
+            </label>
+            <input
+              type="number"
+              name="costPrice"
+              value={form.costPrice}
+              onChange={handleChange}
+              placeholder="Ex: 120000"
+              min="0"
+              step="100"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary transition-all"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+              Preço de Venda (R$) *
+            </label>
+            <input
+              type="number"
+              name="price"
+              value={form.price}
+              onChange={handleChange}
+              placeholder="Ex: 149900"
+              required
+              min="0"
+              step="100"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary transition-all"
+            />
+          </div>
+        </div>
+
+        {margin !== null && marginPct !== null && (
+          <div
+            className={`mt-4 flex items-center gap-2.5 p-3 rounded-xl text-sm font-semibold border ${
+              margin >= 0
+                ? "bg-green-50 text-green-700 border-green-200"
+                : "bg-red-50 text-red-700 border-red-200"
+            }`}
+          >
+            {margin >= 0 ? "Lucro" : "Prejuizo"}: R$ {Math.abs(margin).toLocaleString("pt-BR", {
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            })}
+            ({margin >= 0 ? "+" : ""}{marginPct.toFixed(1)}%)
+          </div>
+        )}
+
+        <p className="text-xs text-gray-400 mt-3">
+          O valor FIPE pode ser consultado no Dashboard apos salvar o veiculo.
+        </p>
       </div>
 
       {/* Images */}

@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { timingSafeEqual } from "crypto";
 import { SESSION_COOKIE, getSessionToken } from "@/lib/session";
 
 export async function isAuthenticated(): Promise<boolean> {
@@ -31,6 +32,16 @@ export async function destroySession(): Promise<void> {
   cookieStore.delete(SESSION_COOKIE);
 }
 
+function safeCompare(left: string, right: string): boolean {
+  const leftBuffer = Buffer.from(left);
+  const rightBuffer = Buffer.from(right);
+  if (leftBuffer.length !== rightBuffer.length) {
+    return false;
+  }
+
+  return timingSafeEqual(leftBuffer, rightBuffer);
+}
+
 export function validateCredentials(email: string, password: string): boolean {
   const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
   const adminPassword = process.env.ADMIN_PASSWORD;
@@ -39,5 +50,6 @@ export function validateCredentials(email: string, password: string): boolean {
     return false;
   }
 
-  return email.trim().toLowerCase() === adminEmail && password === adminPassword;
+  const normalizedEmail = email.trim().toLowerCase();
+  return safeCompare(normalizedEmail, adminEmail) && safeCompare(password, adminPassword);
 }

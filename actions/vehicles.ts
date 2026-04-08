@@ -12,11 +12,13 @@ export interface VehicleFormData {
   name: string;
   description: string;
   price: number;
+  costPrice?: number;
   status: VehicleStatus;
   year?: number;
   brand?: string;
   mileage?: number;
   color?: string;
+  plate?: string;
   imageUrls: string[];
 }
 
@@ -54,12 +56,28 @@ function sanitizeVehicleData(data: VehicleFormData): VehicleFormData {
     throw new Error("Quilometragem inválida.");
   }
 
+  if (typeof data.costPrice === "number") {
+    if (!Number.isFinite(data.costPrice) || data.costPrice < 0) {
+      throw new Error("Preço de custo inválido.");
+    }
+  }
+
+  const normalizedPlate = data.plate
+    ?.trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "");
+
+  if (normalizedPlate && normalizedPlate.length !== 7) {
+    throw new Error("Placa inválida. Use 7 caracteres (ex: ABC1234). ");
+  }
+
   return {
     ...data,
     name,
     description: data.description.trim(),
     brand: data.brand?.trim(),
     color: data.color?.trim(),
+    plate: normalizedPlate,
     imageUrls: data.imageUrls.filter(Boolean),
   };
 }
@@ -90,11 +108,13 @@ export async function createVehicle(data: VehicleFormData) {
       name: sanitized.name,
       description: sanitized.description,
       price: sanitized.price,
+      costPrice: sanitized.costPrice ?? null,
       status: sanitized.status,
       year: sanitized.year || null,
       brand: sanitized.brand || null,
       mileage: sanitized.mileage || null,
       color: sanitized.color || null,
+      plate: sanitized.plate || null,
       images: {
         create: sanitized.imageUrls.map((url) => ({ url })),
       },
@@ -119,11 +139,13 @@ export async function updateVehicle(id: string, data: VehicleFormData) {
       name: sanitized.name,
       description: sanitized.description,
       price: sanitized.price,
+      costPrice: sanitized.costPrice ?? null,
       status: sanitized.status,
       year: sanitized.year || null,
       brand: sanitized.brand || null,
       mileage: sanitized.mileage || null,
       color: sanitized.color || null,
+      plate: sanitized.plate || null,
       images: {
         create: sanitized.imageUrls.map((url) => ({ url })),
       },
