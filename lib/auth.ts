@@ -1,19 +1,16 @@
 import { cookies } from "next/headers";
 import { timingSafeEqual } from "crypto";
-import { SESSION_COOKIE, getSessionToken } from "@/lib/session";
+import { SESSION_COOKIE, SESSION_MAX_AGE_SECONDS, createSessionToken, verifySessionToken } from "@/lib/session";
 
 export async function isAuthenticated(): Promise<boolean> {
   const cookieStore = await cookies();
   const session = cookieStore.get(SESSION_COOKIE);
-  const token = await getSessionToken();
-  if (!session) return false;
-  if (!token) return false;
-  return session.value === token;
+  return verifySessionToken(session?.value);
 }
 
 export async function createSession(): Promise<void> {
   const cookieStore = await cookies();
-  const token = await getSessionToken();
+  const token = await createSessionToken();
   if (!token) {
     throw new Error("SESSION_SECRET não configurado.");
   }
@@ -22,7 +19,7 @@ export async function createSession(): Promise<void> {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7, // 7 days
+    maxAge: SESSION_MAX_AGE_SECONDS,
     path: "/",
   });
 }
